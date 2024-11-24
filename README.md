@@ -5,9 +5,11 @@
 ~~~
 python3 -m venv venv
 ~~~
-- 가상환경 실행
-~~~
-source venv/bin/activate
+- 가상환경 실행 및 종료
+~~~ python
+source venv/bin/activate # 실행
+deactivate # 종료
+
 ~~~
 - 라이브러리 설치
   - 추가 설치해야될게 있을수도 구글링이나 GPT 이용 바람 ..
