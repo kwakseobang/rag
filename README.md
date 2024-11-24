@@ -11,13 +11,23 @@ source venv/bin/activate
 ~~~
 - 라이브러리 설치
   - 추가 설치해야될게 있을수도 구글링이나 GPT 이용 바람 ..
+    - import가 안된다면 복붙해서 구글링해보면 됨 
 ``` python
     pip install langchain langchain_openai langchain_community
     pip install openai faiss-cpu tiktoken cohere python-dotenv
     pip install streamlit
     pip install pymupdf4llm pymupdf
-    pip install urllib3==1.26.6 #얘는 설치하라하면 하셈
+    pip install urllib3==1.26.6 # 얘는 설치하라하면 하셈
 ```
+
+## 만약에 잘 안된다!
+- 따로 작업환경을 만든다(vscode에 폴더 만들라느거임)
+  - 가상환경 만들기(위에 설명)
+    - venv 디렉토리가 생성될거임
+      - 하위 폴더로 위에서 다운받은 src,data,model,test,test2폴더 넣으셈 README.md 파일도 넣기.
+      - .env는 따로 만들기.(아래 말해둠.)
+      - 위에 말한 패키지들 설치하면 사용가능할거임
+      - 라이브러리 사용 가능해진다는 뜻.
 
 
 # 안내 사항
