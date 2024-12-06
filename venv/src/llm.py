@@ -26,7 +26,6 @@ prompt = PromptTemplate.from_template(
     """당신은 질문에 답변하는 작업을 돕는 한국사 전문 어시스턴트입니다.
 
     # 이전 대화 내용:
-    {chat_history}
 
     이전 대화를 참고하여, 다음 제공된 맥락(Context)을 사용해 질문에 답하세요.
     이전 대화에서 나온 내용이 있다면 그것을 참고하여 답변을 연결해주세요.
@@ -58,7 +57,9 @@ def format_chat_history(chat_history):
 
 def get_chat_history(_arg = None):
         if 'chat_history' in st.session_state:
+            print("get_chat_history:",st.session_state.chat_history)
             chat_history = st.session_state.chat_history
+
         else:
             chat_history = []
         return chat_history
@@ -68,7 +69,7 @@ def get_chain():
     vectorstore = data_load()
     retriever = relank_retriever(vectorstore)
     chain = (
-        {"context": retriever, "question": RunnablePassthrough(), "chat_history": get_chat_history}
+        {"context": retriever, "question": RunnablePassthrough()}
         | prompt
         | llm
         | StrOutputParser()
@@ -101,6 +102,7 @@ def main():
     if "conversation" not in st.session_state or st.session_state.conversation is None:
 
         st.session_state.conversation = get_chain() 
+        print("get_chain")
 
     if "chat_history" not in st.session_state:
        st.session_state.chat_history = [] # 대화 히스토리
@@ -112,17 +114,15 @@ def main():
         st.session_state['messages'] = [{"role": "assistant", 
                                         "content": "안녕하세요! 자랑스러운 한국사에 대해 궁금하신 것이 있으면 언제든 물어봐주세요!"}]
 
-
     # 메시지 출력
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-
     # 사용자 입력 처리
     if query := st.chat_input("질문을 입력하세요..."):
         st.session_state.messages.append({"role": "user", "content": query})
-        st.session_state.chat_history.append(f"User: {query}")  # 대화 기록에 추가
+
         print(st.session_state.chat_history)
         # 사용자 질문 출력
         with st.chat_message("user"):
@@ -133,19 +133,17 @@ def main():
         with st.chat_message("assistant"):
             chain = st.session_state.conversation
             with st.spinner("Thinking..."):
-              
+                # st.session_state.chat_history.append( f"User: {query}Assistant: {result}")  # 대화 기록에 추가
                 result = chain.invoke(query)  # 직접 인자로 전달
                 st.markdown(result)
-                st.session_state.chat_history.append( f"Assistant: {result}")  # 대화 기록에 추가
-                print("답변 ",st.session_state.chat_history)
+             
+             
 
-                
-
+            
         st.session_state.messages.append({"role": "assistant", "content": result})
 
 if __name__ == "__main__":
     main()
-
 
 
     
